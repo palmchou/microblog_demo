@@ -5,6 +5,7 @@ var express = require('express');
 var router = express.Router();
 var crypto = require('crypto');
 var User = require('../models/user.js');
+var check = require('./isLogin');
 
 
 var doPost = function(req, res){
@@ -36,6 +37,7 @@ var doPost = function(req, res){
                 req.flash('errror', err);
                 return res.redirect('/reg');
             }
+            console.log('save user success');
             req.session.user = newUser;
             req.flash('success', 'Sign up success');
             res.redirect('/');
@@ -49,12 +51,10 @@ var doGet = function(req, res){
     });
 }
 
-
+router.get('/', check.cnlin);
 router.get('/',doGet);
-
+router.post('/', check.cnlin);
 router.post('/',doPost);
-
-//TODO:doPost
 
 
 

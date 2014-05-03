@@ -9,7 +9,7 @@ var flash = require('connect-flash');
 
 var session = require('express-session');
 var MongoStone = require('connect-mongo')(session);
-var settings = require('./settings');
+var settings = require('./Settings');
 
 /*********Routers**********/
 var routes = require('./routes/index');
@@ -38,6 +38,16 @@ app.use(session({
     })
 }));
 app.use(flash());
+
+app.use(function(req, res, next){
+    res.locals.user = req.session.user;
+    var error = req.flash('error');
+    res.locals.error = error.length?error:null;
+
+    var succ = req.flash('success');
+    res.locals.success = succ.length?succ:null;
+    next();
+})
 
 
 app.use('/', routes);
